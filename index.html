@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apponur Citizenship Apps</title>
+<meta name="description" content="Study apps for the U.S. citizenship civics test, in English and Spanish, for iPhone and Android.">
+<link rel="icon" href="assets/icon-en.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;800;900&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/lang.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"><span>★</span></span>Apponur</a>
+    <nav>
+      <a class="navlink" href="#apps" data-i18n="navApps">Apps</a>
+      <a class="navlink" href="support/index.html" data-i18n="navSupport">Support</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1 data-i18n="h1">Get ready for your citizenship interview.</h1>
+        <p class="lede" data-i18n="lede">Practice the USCIS civics questions in English or Spanish, on iPhone and Android.</p>
+        <div class="stores">
+          <a class="store" id="heroIos" href="#">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c.02 2.43 2.13 3.24 2.15 3.25-.02.06-.34 1.15-1.11 2.28-.67.98-1.36 1.95-2.46 1.97-1.07.02-1.42-.64-2.65-.64-1.23 0-1.62.62-2.64.66-1.06.04-1.87-1.06-2.54-2.03-1.38-2-2.43-5.64-1.02-8.1.7-1.22 1.96-2 3.32-2.02 1.04-.02 2.02.7 2.65.7.64 0 1.82-.86 3.07-.74.52.02 1.99.21 2.93 1.59-.08.05-1.75 1.02-1.73 3.05zM14.36 4.98c.56-.68.94-1.63.84-2.57-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.57-.85 2.49.9.07 1.82-.46 2.38-1.14z"/></svg>
+            <span><small data-i18n="dlOn">Download on the</small><b>App Store</b></span>
+          </a>
+          <a class="store" id="heroAndroid" href="#">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3.3v17.4c0 .3.17.56.42.68L13.6 12 4.42 2.62A.75.75 0 0 0 4 3.3zm10.68 7.62 2.5-2.5L6.1 2.1l8.58 8.82zm0 2.16L6.1 21.9l11.08-6.32-2.5-2.5zm5.97-2.04-2.4-1.37-2.73 2.33 2.73 2.33 2.4-1.37c.7-.4.7-1.52 0-1.92z"/></svg>
+            <span><small data-i18n="getOn">Get it on</small><b>Google Play</b></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="deck">
+        <div class="stack">
+        <button class="card" id="card" type="button" aria-live="polite">
+          <div class="card-inner">
+            <div class="face front">
+              <div class="stripe" aria-hidden="true"></div>
+              <div class="meta"><span data-i18n="civics">Civics question</span><span id="counter">1 / 6</span></div>
+              <p class="q" id="question"></p>
+              <div class="hint" data-i18n="tap">Tap the card to see the answer</div>
+            </div>
+            <div class="face back">
+              <div class="meta"><span data-i18n="answer">Answer</span><span id="counter2">1 / 6</span></div>
+              <p class="q" id="answerText"></p>
+              <div class="hint" data-i18n="tapBack">Tap again to see the question</div>
+            </div>
+          </div>
+        </button>
+        </div>
+        <div class="deck-controls">
+          <p data-i18n="deckNote">Questions like these are in the app.</p>
+          <button class="next" id="next" type="button" data-i18n="next">Next question</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="vh">
+      <h2 id="vh" data-i18n="vTitle">Which test will you take?</h2>
+      <p class="intro" data-i18n="vIntro">It depends on the date you filed Form N-400. The app covers both versions, and you pick yours when you start.</p>
+      <div class="versions">
+        <div class="version">
+          <p class="when" data-i18n="v1When">Filed before October 20, 2025</p>
+          <h3 data-i18n="v1">2008 civics test</h3>
+          <div class="count">100 <small data-i18n="questions">questions</small></div>
+        </div>
+        <div class="version">
+          <p class="when" data-i18n="v2When">Filed on or after October 20, 2025</p>
+          <h3 data-i18n="v2">2025 civics test</h3>
+          <div class="count">128 <small data-i18n="questions">questions</small></div>
+        </div>
+      </div>
+      <p class="versions-note"><span data-i18n="vNote">Not sure? Check the</span> <a href="https://www.uscis.gov/citizenship-resource-center/naturalization-test-and-study-resources/2025-civics-test" rel="noopener" data-i18n="vLink">USCIS 2025 civics test page</a>.</p>
+    </section>
+
+    <section class="block" aria-labelledby="fh">
+      <h2 id="fh" data-i18n="fTitle">Everything you need to study</h2>
+      <p class="intro" data-i18n="fIntro">Read, listen, practice and review in one app, with offline access.</p>
+      <ul class="features">
+        <li><h3 data-i18n="f1t">Practice tests</h3><p data-i18n="f1d">20 tests with an explanation for every answer.</p></li>
+        <li><h3 data-i18n="f2t">Interview simulator</h3><p data-i18n="f2d">Answer questions the way you will in your real interview.</p></li>
+        <li><h3 data-i18n="f3t">Flashcards</h3><p data-i18n="f3d">Swipe through every question and save the hard ones.</p></li>
+        <li><h3 data-i18n="f4t">Audiobook</h3><p data-i18n="f4d">Listen to questions and answers on the bus or before bed.</p></li>
+        <li><h3 data-i18n="f5t">Your mistakes</h3><p data-i18n="f5d">Redo the questions you got wrong until you get them right.</p></li>
+        <li><h3 data-i18n="f6t">65/20 questions</h3><p data-i18n="f6d">The shorter list for applicants 65 and older.</p></li>
+        <li><h3 data-i18n="f7t">Reading and writing</h3><p data-i18n="f7d">Study the vocabulary for the English test.</p></li>
+        <li><h3 data-i18n="f8t">Study plan</h3><p data-i18n="f8d">Set your interview date and keep a daily streak.</p></li>
+        <li><h3 data-i18n="f9t">Case tracker</h3><p data-i18n="f9d">Follow your USCIS case status next to your progress.</p></li>
+      </ul>
+    </section>
+
+    <section class="block" id="apps" aria-labelledby="ah">
+      <h2 id="ah" data-i18n="aTitle">Choose your app</h2>
+      <p class="intro" data-i18n="aIntro">The same app in two languages. Download the one you want to study in.</p>
+      <table class="matrix">
+        <thead><tr><th scope="col" data-i18n="colApp">App</th><th scope="col">iPhone &amp; iPad</th><th scope="col">Android</th></tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row"><div class="app"><img src="assets/icon-en.png" alt=""><div><b>US Citizenship Test 2026</b><span data-i18n="inEnglish">In English</span></div></div></th>
+            <td><a class="dl" href="https://apps.apple.com/us/app/id1615982636"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c.02 2.43 2.13 3.24 2.15 3.25-.02.06-.34 1.15-1.11 2.28-.67.98-1.36 1.95-2.46 1.97-1.07.02-1.42-.64-2.65-.64-1.23 0-1.62.62-2.64.66-1.06.04-1.87-1.06-2.54-2.03-1.38-2-2.43-5.64-1.02-8.1.7-1.22 1.96-2 3.32-2.02 1.04-.02 2.02.7 2.65.7.64 0 1.82-.86 3.07-.74.52.02 1.99.21 2.93 1.59-.08.05-1.75 1.02-1.73 3.05zM14.36 4.98c.56-.68.94-1.63.84-2.57-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.57-.85 2.49.9.07 1.82-.46 2.38-1.14z"/></svg>App Store</a></td>
+            <td><a class="dl" href="https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3.3v17.4c0 .3.17.56.42.68L13.6 12 4.42 2.62A.75.75 0 0 0 4 3.3zm10.68 7.62 2.5-2.5L6.1 2.1l8.58 8.82zm0 2.16L6.1 21.9l11.08-6.32-2.5-2.5zm5.97-2.04-2.4-1.37-2.73 2.33 2.73 2.33 2.4-1.37c.7-.4.7-1.52 0-1.92z"/></svg>Google Play</a></td>
+          </tr>
+          <tr>
+            <th scope="row"><div class="app"><img src="assets/icon-es.png" alt=""><div><b>Examen de Ciudadanía de EE. UU.</b><span data-i18n="inSpanish">In Spanish</span></div></div></th>
+            <td><a class="dl" href="https://apps.apple.com/us/app/id1617090965"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c.02 2.43 2.13 3.24 2.15 3.25-.02.06-.34 1.15-1.11 2.28-.67.98-1.36 1.95-2.46 1.97-1.07.02-1.42-.64-2.65-.64-1.23 0-1.62.62-2.64.66-1.06.04-1.87-1.06-2.54-2.03-1.38-2-2.43-5.64-1.02-8.1.7-1.22 1.96-2 3.32-2.02 1.04-.02 2.02.7 2.65.7.64 0 1.82-.86 3.07-.74.52.02 1.99.21 2.93 1.59-.08.05-1.75 1.02-1.73 3.05zM14.36 4.98c.56-.68.94-1.63.84-2.57-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.57-.85 2.49.9.07 1.82-.46 2.38-1.14z"/></svg>App Store</a></td>
+            <td><a class="dl" href="https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3.3v17.4c0 .3.17.56.42.68L13.6 12 4.42 2.62A.75.75 0 0 0 4 3.3zm10.68 7.62 2.5-2.5L6.1 2.1l8.58 8.82zm0 2.16L6.1 21.9l11.08-6.32-2.5-2.5zm5.97-2.04-2.4-1.37-2.73 2.33 2.73 2.33 2.4-1.37c.7-.4.7-1.52 0-1.92z"/></svg>Google Play</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block" id="support" aria-labelledby="sh">
+      <div class="support">
+        <div>
+          <h2 id="sh" data-i18n="sTitle">Questions or feedback?</h2>
+          <p class="intro" style="margin:0" data-i18n="sIntro">Write to us about a bug, your subscription or a question you think is wrong. We read every message.</p>
+        </div>
+        <a class="mail" href="mailto:support@apponur.com">support@apponur.com</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="row">
+      <span>© 2026 Apponur</span>
+      <nav>
+        <a href="privacy/index.html" data-i18n="privacy">Privacy policy</a>
+        <a href="terms/index.html" data-i18n="terms">Terms of use</a>
+        <a href="support/index.html" data-i18n="navSupport">Support</a>
+      </nav>
+    </div>
+    <p data-i18n="disclaimer">Apponur is an independent developer. Our apps are not affiliated with or endorsed by USCIS or any government agency. Civics questions come from public USCIS study materials.</p>
+  </footer>
+</div>
+
+<script>
+const LINKS = {
+  en:{ios:"https://apps.apple.com/us/app/id1615982636",android:"https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest"},
+  es:{ios:"https://apps.apple.com/us/app/id1617090965",android:"https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest"}
+};
+const CARDS = {
+  en:[
+    ["What is the supreme law of the land?","The U.S. Constitution"],
+    ["How many U.S. senators are there?","One hundred (100)"],
+    ["We elect a U.S. senator for how many years?","Six (6)"],
+    ["Who was the first President of the United States?","George Washington"],
+    ["How many amendments does the U.S. Constitution have?","Twenty-seven (27)"],
+    ["Name one branch or part of the government.","Congress, the President, or the courts"]
+  ],
+  es:[
+    ["¿Cuál es la ley suprema de la nación?","La Constitución de EE. UU."],
+    ["¿Cuántos senadores de EE. UU. hay?","Cien (100)"],
+    ["¿Por cuántos años elegimos a un senador de EE. UU.?","Seis (6)"],
+    ["¿Quién fue el primer presidente de los Estados Unidos?","George Washington"],
+    ["¿Cuántas enmiendas tiene la Constitución de EE. UU.?","Veintisiete (27)"],
+    ["Nombre una rama o parte del gobierno.","El Congreso, el Presidente o los tribunales"]
+  ]
+};
+const T = {
+  es:{
+    navApps:"Aplicaciones",navSupport:"Ayuda",
+    h1:"Prepárate para tu entrevista de ciudadanía.",
+    lede:"Practica las preguntas de educación cívica de USCIS en español o en inglés, en iPhone y Android.",
+    dlOn:"Descárgalo en el",getOn:"Disponible en",
+    civics:"Pregunta de educación cívica",answer:"Respuesta",
+    tap:"Toca la tarjeta para ver la respuesta",tapBack:"Toca otra vez para ver la pregunta",
+    deckNote:"Preguntas como estas están en la app.",next:"Siguiente pregunta",
+    vTitle:"¿Qué examen vas a tomar?",
+    vIntro:"Depende de la fecha en que presentaste el Formulario N-400. La app incluye las dos versiones y eliges la tuya al empezar.",
+    v1When:"Presentado antes del 20 de octubre de 2025",v1:"Examen cívico de 2008",
+    v2When:"Presentado el 20 de octubre de 2025 o después",v2:"Examen cívico de 2025",
+    questions:"preguntas",vNote:"¿No estás seguro? Consulta la",vLink:"página de USCIS sobre el examen de 2025",
+    fTitle:"Todo lo que necesitas para estudiar",fIntro:"Lee, escucha, practica y repasa en una sola app, también sin conexión.",
+    f1t:"Exámenes de práctica",f1d:"20 exámenes con una explicación para cada respuesta.",
+    f2t:"Simulador de entrevista",f2d:"Responde las preguntas como lo harás en tu entrevista real.",
+    f3t:"Tarjetas de estudio",f3d:"Repasa todas las preguntas y guarda las difíciles.",
+    f4t:"Audiolibro",f4d:"Escucha preguntas y respuestas en el autobús o antes de dormir.",
+    f5t:"Tus errores",f5d:"Repite las preguntas que fallaste hasta acertarlas.",
+    f6t:"Preguntas 65/20",f6d:"La lista corta para solicitantes de 65 años o más.",
+    f7t:"Lectura y escritura",f7d:"Estudia el vocabulario del examen de inglés.",
+    f8t:"Plan de estudio",f8d:"Fija la fecha de tu entrevista y mantén tu racha diaria.",
+    f9t:"Seguimiento del caso",f9d:"Consulta el estado de tu caso de USCIS junto a tu progreso.",
+    aTitle:"Elige tu app",aIntro:"La misma app en dos idiomas. Descarga la del idioma en que quieres estudiar.",
+    colApp:"App",inEnglish:"En inglés",inSpanish:"En español",
+    sTitle:"¿Preguntas o comentarios?",
+    sIntro:"Escríbenos sobre un error, tu suscripción o una pregunta que creas incorrecta. Leemos todos los mensajes.",
+    privacy:"Política de privacidad",terms:"Términos de uso",
+    disclaimer:"Apponur es un desarrollador independiente. Nuestras apps no están afiliadas ni respaldadas por USCIS ni por ninguna agencia del gobierno. Las preguntas provienen de materiales de estudio públicos de USCIS."
+  }
+};
+const EN = {};
+document.querySelectorAll("[data-i18n]").forEach(el=>{ if(!(el.dataset.i18n in EN)) EN[el.dataset.i18n]=el.textContent; });
+T.en = EN;
+
+let lang = "en", idx = 0;
+const card = document.getElementById("card");
+function renderCard(){
+  const c = CARDS[lang][idx], n = `${idx+1} / ${CARDS[lang].length}`;
+  document.getElementById("question").textContent = c[0];
+  document.getElementById("answerText").textContent = c[1];
+  document.getElementById("counter").textContent = n;
+  document.getElementById("counter2").textContent = n;
+}
+function setLang(l){
+  lang = l;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=T[l][el.dataset.i18n]; if(v) el.textContent=v; });
+  document.getElementById("heroIos").href = LINKS[l].ios;
+  document.getElementById("heroAndroid").href = LINKS[l].android;
+  card.classList.remove("flipped"); renderCard();
+}
+window.onLangChange = setLang;
+card.addEventListener("click",()=>card.classList.toggle("flipped"));
+document.getElementById("next").addEventListener("click",()=>{
+  card.classList.remove("flipped");
+  idx = (idx+1) % CARDS[lang].length;
+  setTimeout(renderCard, 120);
+});
+</script>
+</body>
+</html>
