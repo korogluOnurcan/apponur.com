@@ -44,7 +44,7 @@ a{color:inherit}
 /* ---------- header ---------- */
 .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0}
 .brand{display:inline-flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
-.brand svg{width:34px;height:34px;flex:none}
+.brand picture,.brand img{display:block;width:36px;height:36px;flex:none}
 .top nav{display:flex;align-items:center;gap:22px;font-weight:500;font-size:15px}
 .top nav a{text-decoration:none}
 .top nav a.navlink:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
@@ -193,7 +193,7 @@ section.block .intro{color:var(--muted);max-width:60ch;margin:0 0 40px}
 footer{border-top:1.5px solid var(--line);padding:44px 0 52px;font-size:14px;color:var(--muted)}
 footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
 footer .brand{font-size:19px;color:var(--ink)}
-footer .brand svg{width:28px;height:28px}
+footer .brand picture,footer .brand img{width:30px;height:30px}
 footer .about{margin:12px 0 0;max-width:34ch}
 footer h4{margin:0 0 10px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
 footer ul{list-style:none;margin:0;padding:0}
