@@ -14,19 +14,20 @@
   --count:var(--blue);
   --shadow:0 24px 48px -28px rgba(22,40,74,.45);
   --stripe-white:#E4E9F1;
+  --gold:#A9781F;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#0E1729; --card:#16233D; --ink:#EEF2F8; --muted:#A8B4CB; --line:#283A5B;
     --blue-soft:#1A2D4D; --red-soft:#3A1E27; --accent:#8DB4EA; --count:#8DB4EA;
-    --shadow:0 24px 48px -28px rgba(0,0,0,.8); --stripe-white:#fff; color-scheme:dark;
+    --shadow:0 24px 48px -28px rgba(0,0,0,.8); --stripe-white:#fff; --gold:#D9A84A; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --paper:#0E1729; --card:#16233D; --ink:#EEF2F8; --muted:#A8B4CB; --line:#283A5B;
   --blue-soft:#1A2D4D; --red-soft:#3A1E27; --accent:#8DB4EA; --count:#8DB4EA;
-  --shadow:0 24px 48px -28px rgba(0,0,0,.8); --stripe-white:#fff; color-scheme:dark;
+  --shadow:0 24px 48px -28px rgba(0,0,0,.8); --stripe-white:#fff; --gold:#D9A84A; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -43,8 +44,18 @@ a{color:inherit}
 
 /* ---------- header ---------- */
 .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0}
-.brand{display:inline-flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
-.brand img{display:block;width:auto;height:42px;flex:none}
+/* Brand lockup: keyhole mark, name, a gold rule with a star, and the tagline.
+   Sizes are in em so the footer can shrink the whole lockup with one font-size. */
+.brand{display:inline-flex;align-items:center;gap:.6em;font-size:23px;text-decoration:none;color:var(--ink)}
+.brand-mark{display:block;height:2.15em;width:auto;flex:none}
+.brand-text{display:inline-flex;flex-direction:column;align-items:flex-start}
+.brand-name{font:700 1em/1 "Playfair Display",Georgia,serif;letter-spacing:.18em;text-transform:uppercase;margin-right:-.18em}
+.brand-orn{align-self:stretch;display:flex;align-items:center;gap:.26em;margin:.2em 0 .19em}
+.brand-orn i{flex:1;height:1px;background:var(--gold)}
+.brand-orn b{width:.3em;height:.3em;background:var(--gold);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.brand-tag{font:700 .32em/1 "Libre Franklin",sans-serif;text-transform:uppercase;letter-spacing:var(--tag-ls);margin-right:calc(-1 * var(--tag-ls));color:var(--muted);white-space:nowrap}
+/* tracking that makes each tagline exactly as wide as the name */
+.brand-tag{--tag-ls:.0994em}html[lang="es"] .brand-tag{--tag-ls:.183em}
 .top nav{display:flex;align-items:center;gap:22px;font-weight:500;font-size:15px}
 .top nav a{text-decoration:none}
 .top nav a.navlink:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
@@ -192,8 +203,8 @@ section.block .intro{color:var(--muted);max-width:60ch;margin:0 0 40px}
 /* footer */
 footer{border-top:1.5px solid var(--line);padding:44px 0 52px;font-size:14px;color:var(--muted)}
 footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
-footer .brand{font-size:19px;color:var(--ink)}
-footer .brand img{height:34px}
+footer .brand{font-size:17px}
+
 footer .about{margin:12px 0 0;max-width:34ch}
 footer h4{margin:0 0 10px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
 footer ul{list-style:none;margin:0;padding:0}
