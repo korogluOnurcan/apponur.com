@@ -59,6 +59,7 @@ a{color:inherit}
 .top nav{display:flex;align-items:center;gap:22px;font-weight:500;font-size:15px}
 .top nav a{text-decoration:none}
 .top nav a.navlink:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
+.top nav a.navlink[aria-current="page"]{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px;text-decoration-color:var(--red)}
 .lang{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;padding:3px}
 .lang a,.lang button{font:600 13px "Libre Franklin",sans-serif;border:0;background:none;color:var(--muted);padding:5px 11px;border-radius:999px;cursor:pointer;text-decoration:none;line-height:1.4}
 .lang [aria-current="true"],.lang [aria-pressed="true"]{background:var(--ink);color:var(--paper)}
