@@ -1,6 +1,6 @@
 // Home-page demo: the app's own test screen and result screen with the app's free Test 1
 // (the 20 questions free users get), colors and motion (fragment_question + TestQuestionPage,
-// fragment_result + TestResultPage). A tap anywhere that is not a button opens the store.
+// fragment_result + TestResultPage). Next Test and the download card open the store.
 (function () {
   "use strict";
   var root = document.getElementById("quiz");
@@ -631,16 +631,6 @@
     var k = "1234".indexOf(e.key);
     if (k < 0) k = "abcd".indexOf(e.key.toLowerCase());
     if (k >= 0 && mode === "test") { e.preventDefault(); choose(idx, k, questions[idx].o[k]); }
-  });
-
-  // Everything in the phone that is not a button or a link takes the visitor to the store.
-  var device = root.closest(".phone") || root;
-  device.classList.add("to-store");
-  device.addEventListener("click", function (e) {
-    if (e.target.closest && e.target.closest("button, a")) return;
-    var sel = window.getSelection && window.getSelection();
-    if (sel && String(sel).length) return;   // selecting text is not a tap
-    openStore();
   });
 
   while (root.firstChild) root.removeChild(root.firstChild);

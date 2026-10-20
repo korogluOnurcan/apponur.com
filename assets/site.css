@@ -97,7 +97,6 @@ a{color:inherit}
 .status .bat{width:25px;height:12px;border:1.5px solid #111;border-radius:4px;position:relative;opacity:.9}
 .status .bat::before{content:"";position:absolute;inset:1.5px;right:4px;background:#111;border-radius:1.5px}
 .status .bat::after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:#111;border-radius:0 1px 1px 0}
-.phone.to-store{cursor:pointer}
 .demo-cap{margin:18px 0 0;text-align:center;font-size:14px;color:var(--muted)}
 .demo-cap b{color:var(--ink)}
 
