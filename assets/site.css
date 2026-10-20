@@ -117,6 +117,7 @@ a{color:inherit}
 .a-circle{width:calc(48 * var(--dp));height:calc(48 * var(--dp));border-radius:50%;background:var(--light);display:grid;place-items:center;color:var(--gray)}
 .a-circle svg{width:calc(28 * var(--dp));height:calc(28 * var(--dp));fill:currentColor}
 .a-circle.speak{margin-left:calc(8 * var(--dp))}
+.a-circle.speak.on{color:var(--blue)}
 .a-circle.speak svg{width:calc(22 * var(--dp));height:calc(22 * var(--dp))}
 .a-titles{flex:1;min-width:0;margin-left:calc(8 * var(--dp));text-align:right}
 .a-title{font:700 calc(24 * var(--dp))/1.15 "Montserrat",sans-serif;letter-spacing:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

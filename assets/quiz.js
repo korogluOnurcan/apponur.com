@@ -95,18 +95,66 @@
     return { c: c, w: w, done: c + w };
   }
 
-  // ---------- speech (the app reads questions aloud) ----------
-  var canSpeak = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function";
-  function speak(text) {
-    if (!canSpeak) return;
-    try {
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text);
-      u.lang = L.voice; u.rate = 0.95;
-      window.speechSynthesis.speak(u);
-    } catch (e) {}
+  // ---------- speech (the app reads questions aloud with the phone's own voice) ----------
+  // Browsers often default to a novelty or very old voice, so pick the most natural one the
+  // device has: neural / natural voices first, then premium and enhanced, Google's, then the
+  // well-known good system voices. Novelty voices are never used.
+  var synth = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function" ? window.speechSynthesis : null;
+  var canSpeak = !!synth, voice = null, speaking = false;
+  // Novelty voices, by English name, by their names on a Turkish or Spanish system, and by voiceURI
+  // (com.apple.speech.synthesis.voice.BadNews, ...), which does not change with the system language.
+  var NOVELTY = /\b(albert|bad ?news|bahh|bells|boing|bubbles|cellos|wobble|fred|good ?news|jester|junior|organ|pipe ?organ|superstar|ralph|trinoids|whisper|zarvox|deranged|hysterical|kathy|princess|vicki|victoria|bruce|agnes)\b/i;
+  // JavaScript's \b only knows ASCII letters, so the localized names (İyi Haber, ...) get their own test.
+  var NOVELTY_LOCAL = /(İ|i̇|i|ı)yi haber|kötü haber|^org(\s|$)|noticias|órgano|burbujas|campanas/i;
+  var OLD = /eloquence|\b(grandma|grandpa|rocko|eddy|flo|reed|sandy|shelley)\b/i;   // older, flatter voices
+  var GOOD = /\b(samantha|ava|allison|susan|zoe|evan|nathan|joelle|tom|noelle|nicky|aaron|paulina|m[oó]nica|juan|marisol|jorge|diego|isabela|francisca|ang[eé]lica|soledad)\b/i;
+  function score(v) {
+    var n = (v.name || "") + " " + (v.voiceURI || ""), lang = (v.lang || "").replace("_", "-").toLowerCase(), want = L.voice.toLowerCase();
+    if (lang.slice(0, 2) !== want.slice(0, 2) || NOVELTY.test(n) || NOVELTY_LOCAL.test(n) || NOVELTY_LOCAL.test(v.name || "")) return -1;
+    var sc = lang === want ? 6 : /^es-(mx|us|419)|^en-(us|ca)/.test(lang) ? 4 : 0;
+    if (/natural|neural/i.test(n)) sc += 100;
+    else if (/premium/i.test(n)) sc += 90;
+    else if (/enhanced|mejorad|geliştirilmiş/i.test(n)) sc += 80;
+    else if (/google/i.test(n)) sc += 70;
+    else if (GOOD.test(n)) sc += 60;
+    else if (OLD.test(n)) sc += 10;
+    else sc += 30;
+    return sc;
   }
-  function hush() { if (canSpeak) try { window.speechSynthesis.cancel(); } catch (e) {} }
+  function chooseVoice() {
+    if (!synth) return;
+    var best = null, bestScore = -1;
+    (synth.getVoices() || []).forEach(function (v) { var sc = score(v); if (sc > bestScore) { best = v; bestScore = sc; } });
+    voice = best;
+  }
+  if (synth) {
+    chooseVoice();
+    if (synth.addEventListener) synth.addEventListener("voiceschanged", chooseVoice);
+    else synth.onvoiceschanged = chooseVoice;
+  }
+  // The speaker turns blue while reading, as in the app (QuestionFragment's speaker tint).
+  function setSpeaking(on) {
+    speaking = on;
+    var b = Q && Q.speak;
+    if (!b) return;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-label", on ? L.stop : L.speak);
+  }
+  function speak(text) {
+    if (!synth) return;
+    try {
+      synth.cancel();
+      if (!voice) chooseVoice();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = voice ? voice.lang : L.voice;
+      if (voice) u.voice = voice;
+      u.rate = 1; u.pitch = 1;
+      u.onstart = function () { setSpeaking(true); };
+      u.onend = u.onerror = function () { setSpeaking(false); };
+      synth.speak(u);
+    } catch (e) { setSpeaking(false); }
+  }
+  function hush() { if (synth) try { synth.cancel(); } catch (e) {} setSpeaking(false); }
 
   // ---------- screen transitions ----------
   // A new screen comes in from the right while the old one leaves to the left (and the other way
@@ -183,7 +231,7 @@
     p.appendChild(live);
 
     back.addEventListener("click", function (e) { if (mode === "review") toResult(false, e.detail === 0); else go(-1, e.detail === 0); });
-    spk.addEventListener("click", function () { speak(questions[idx].q); });
+    spk.addEventListener("click", function () { if (speaking) hush(); else speak(questions[idx].q); });
     prev.addEventListener("click", function (e) { go(-1, e.detail === 0); });
     next.addEventListener("click", function (e) { go(1, e.detail === 0); });
     fav.addEventListener("click", function () {
@@ -192,7 +240,7 @@
       drawFav(true, on);
     });
 
-    Q = { page: p, scroll: scroll, view: view, head: head, revnum: revnum, cn: cn, wn: wn, pos: pos, bar: fillBar, fav: fav };
+    Q = { page: p, scroll: scroll, view: view, head: head, revnum: revnum, cn: cn, wn: wn, pos: pos, bar: fillBar, fav: fav, speak: spk };
     fill(scroll, idx);
     chrome(false);
     return p;
