@@ -107,29 +107,21 @@
         </ul>
       </div>
 
-      <div class="deck">
-        <div class="stack">
-          <button class="card" id="card" type="button" aria-pressed="false" aria-describedby="cardHelp">
-            <span class="card-inner">
-              <span class="face front">
-                <span class="meta"><span>Pregunta cívica</span><span data-counter>1 / 8</span></span>
-                <span class="q" id="question">¿Cuál es la ley suprema de la nación?</span>
-                <span class="hint" id="cardHelp"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.8h2.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Toca la tarjeta para ver la respuesta</span>
-              </span>
-              <span class="face back" aria-hidden="true">
-                <span class="meta"><span>Respuesta</span><span data-counter>1 / 8</span></span>
-                <span class="q" id="answerText">La Constitución</span>
-                <span class="hint">Toca otra vez para ver la pregunta</span>
-              </span>
-            </span>
-          </button>
+<div class="demo">
+        <div class="phone" id="quiz">
+          <div class="screen">
+            <div class="app-status" aria-hidden="true"><span>9:41</span><span class="bat"></span></div>
+            <div class="app-head"><img src="/assets/brand/mark.svg" alt="" width="17" height="30"><div><b>Examen de práctica</b><span class="app-count">Pregunta 1 de 5</span></div></div>
+            <div class="app-progress" aria-hidden="true"><i class="now"></i><i></i><i></i><i></i><i></i></div>
+            <div class="app-body">
+              <div class="app-view">
+                <p class="app-q" id="quiz-q">¿Cuál es la ley suprema de la nación?</p><p class="app-en"><span>En inglés: </span>What is the supreme law of the land?</p>
+                <div class="app-opts" role="group" aria-labelledby="quiz-q"><button class="app-opt" type="button" disabled><span class="app-key">A</span><span class="app-txt">La Constitución</span><span class="app-mark" aria-hidden="true"></span></button><button class="app-opt" type="button" disabled><span class="app-key">B</span><span class="app-txt">La Declaración de Independencia</span><span class="app-mark" aria-hidden="true"></span></button><button class="app-opt" type="button" disabled><span class="app-key">C</span><span class="app-txt">La Proclamación de Emancipación</span><span class="app-mark" aria-hidden="true"></span></button><button class="app-opt" type="button" disabled><span class="app-key">D</span><span class="app-txt">Los Documentos Federalistas</span><span class="app-mark" aria-hidden="true"></span></button></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="deck-controls">
-          <div class="dots" id="dots" aria-hidden="true"></div>
-          <button class="next" id="next" type="button">Siguiente pregunta <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
-        <p class="deck-note">Preguntas reales de la lista de estudio de USCIS. Desliza o usa las flechas del teclado.</p>
-        <p class="sr-only" id="cardLive" aria-live="polite"></p>
+        <p class="demo-cap"><b>Pruébalo:</b> 5 preguntas cívicas reales de la lista de USCIS.</p>
       </div>
     </section>
 
@@ -284,18 +276,8 @@
   </footer>
 </div>
 
-<script type="application/json" id="cards">
-{"answerLabel":"Respuesta","cards":[
-  ["¿Cuál es la ley suprema de la nación?","La Constitución"],
-  ["¿Cuántos senadores de EE. UU. hay?","Cien (100)"],
-  ["¿Por cuántos años elegimos a un senador de EE. UU.?","Seis (6)"],
-  ["¿Quién fue el primer presidente de los Estados Unidos?","George Washington"],
-  ["¿Cuántas enmiendas tiene la Constitución de EE. UU.?","Veintisiete (27)"],
-  ["Nombre las tres ramas del gobierno.","Legislativa, ejecutiva y judicial"],
-  ["¿Por qué tiene la bandera 13 franjas?","Porque había 13 colonias originales"],
-  ["¿Cuándo celebramos el Día de la Independencia?","El 4 de julio"]
-]}
-</script>
+<script type="application/json" id="quiz-data">{"labels":{"title":"Examen de práctica","of":"Pregunta {n} de {t}","choose":"Elige una respuesta","right":"¡Correcto!","wrong":"No es correcto.","answerIs":"La respuesta es:","next":"Siguiente pregunta","finish":"Ver mi resultado","scoreOf":"{s} de {t} correctas","levels":[["¡Sigue adelante!","Todos empiezan en algún lugar. La app te muestra cada respuesta y te explica por qué."],["¡Sigue adelante!","Todos empiezan en algún lugar. La app te muestra cada respuesta y te explica por qué."],["¡Sigue adelante!","Todos empiezan en algún lugar. La app te muestra cada respuesta y te explica por qué."],["¡Buen comienzo!","Unos minutos al día con la app te llevarán a la meta."],["¡Muy bien!","Ya casi lo tienes. Repasa lo que falta con 20 exámenes de práctica."],["¡Puntuación perfecta!","Lo sabes muy bien. Mantente al día con las 128 preguntas."]],"passed":"Eso es un aprobado (60 %) en la entrevista real.","failed":"En la entrevista real necesitas un 60 % para aprobar.","cta":"Consigue las 128 preguntas en la app","again":"Probar 5 preguntas más","inEnglish":"En inglés:","ios":["Descárgalo en el","App Store"],"android":["Disponible en","Google Play"]},"links":{"ios":"https://apps.apple.com/us/app/id1617090965","android":"https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest"},"questions":[{"q":"¿Cuál es la ley suprema de la nación?","o":["La Constitución","La Declaración de Independencia","La Proclamación de Emancipación","Los Documentos Federalistas"],"a":0,"w":"La Constitución establece el gobierno y protege los derechos básicos de los estadounidenses. Ninguna ley puede ir en su contra.","en":"What is the supreme law of the land?"},{"q":"¿Cuántos senadores de EE. UU. hay?","o":["50","100","435","538"],"a":1,"w":"Cada uno de los 50 estados elige dos senadores.","en":"How many U.S. senators are there?"},{"q":"¿Por cuántos años elegimos a un senador de EE. UU.?","o":["Dos (2)","Cuatro (4)","Seis (6)","Ocho (8)"],"a":2,"w":"Los representantes sirven dos años y el presidente, cuatro.","en":"We elect a U.S. senator for how many years?"},{"q":"¿Quién fue el primer presidente de los Estados Unidos?","o":["John Adams","George Washington","Thomas Jefferson","Abraham Lincoln"],"a":1,"w":"George Washington dirigió el ejército en la Guerra de Independencia y fue presidente desde 1789.","en":"Who was the first President of the United States?"},{"q":"¿Cuántas enmiendas tiene la Constitución de EE. UU.?","o":["Diez (10)","Veintisiete (27)","Treinta y tres (33)","Cincuenta (50)"],"a":1,"w":"Las primeras diez enmiendas se llaman la Carta de Derechos.","en":"How many amendments does the U.S. Constitution have?"},{"q":"¿Cuáles son las dos partes del Congreso de EE. UU.?","o":["El Senado y la Cámara de Representantes","El presidente y el gabinete","La Corte Suprema y los tribunales federales","El Senado y el gabinete"],"a":0,"w":"Juntos, el Senado y la Cámara hacen las leyes federales.","en":"What are the two parts of the U.S. Congress?"},{"q":"¿Por qué tiene la bandera 13 franjas?","o":["Por los primeros 13 presidentes","Porque había 13 colonias originales","Por los 13 padres fundadores","Por los 13 estados más grandes"],"a":1,"w":"Las franjas representan las 13 colonias originales. Las 50 estrellas representan los 50 estados.","en":"Why does the flag have 13 stripes?"},{"q":"¿Cuándo celebramos el Día de la Independencia?","o":["El 4 de julio","El 1 de enero","El 11 de noviembre","El 17 de septiembre"],"a":0,"w":"La Declaración de Independencia se aprobó el 4 de julio de 1776.","en":"When do we celebrate Independence Day?"},{"q":"¿Quién es el Comandante en Jefe de las Fuerzas Armadas?","o":["El secretario de Defensa","El presidente","El vicepresidente","El presidente de la Cámara"],"a":1,"w":"La Constitución le da este papel al presidente.","en":"Who is the Commander in Chief of the U.S. military?"},{"q":"¿Qué océano está en la costa este de los Estados Unidos?","o":["El océano Pacífico","El océano Atlántico","El océano Índico","El océano Ártico"],"a":1,"w":"El océano Pacífico está en la costa oeste.","en":"What ocean is on the East Coast of the United States?"}]}</script>
+<script src="/assets/quiz.js" defer></script>
 <script src="/assets/home.js" defer></script>
 </body>
 </html>

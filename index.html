@@ -139,29 +139,21 @@
         </ul>
       </div>
 
-      <div class="deck">
-        <div class="stack">
-          <button class="card" id="card" type="button" aria-pressed="false" aria-describedby="cardHelp">
-            <span class="card-inner">
-              <span class="face front">
-                                <span class="meta"><span>Civics question</span><span data-counter>1 / 8</span></span>
-                <span class="q" id="question">What is the supreme law of the land?</span>
-                <span class="hint" id="cardHelp"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.8h2.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Tap the card to see the answer</span>
-              </span>
-              <span class="face back" aria-hidden="true">
-                                <span class="meta"><span>Answer</span><span data-counter>1 / 8</span></span>
-                <span class="q" id="answerText">The Constitution</span>
-                <span class="hint">Tap again to see the question</span>
-              </span>
-            </span>
-          </button>
+<div class="demo">
+        <div class="phone" id="quiz">
+          <div class="screen">
+            <div class="app-status" aria-hidden="true"><span>9:41</span><span class="bat"></span></div>
+            <div class="app-head"><img src="/assets/brand/mark.svg" alt="" width="17" height="30"><div><b>Practice test</b><span class="app-count">Question 1 of 5</span></div></div>
+            <div class="app-progress" aria-hidden="true"><i class="now"></i><i></i><i></i><i></i><i></i></div>
+            <div class="app-body">
+              <div class="app-view">
+                <p class="app-q" id="quiz-q">What is the supreme law of the land?</p>
+                <div class="app-opts" role="group" aria-labelledby="quiz-q"><button class="app-opt" type="button" disabled><span class="app-key">A</span><span class="app-txt">The Constitution</span><span class="app-mark" aria-hidden="true"></span></button><button class="app-opt" type="button" disabled><span class="app-key">B</span><span class="app-txt">The Declaration of Independence</span><span class="app-mark" aria-hidden="true"></span></button><button class="app-opt" type="button" disabled><span class="app-key">C</span><span class="app-txt">The Emancipation Proclamation</span><span class="app-mark" aria-hidden="true"></span></button><button class="app-opt" type="button" disabled><span class="app-key">D</span><span class="app-txt">The Federalist Papers</span><span class="app-mark" aria-hidden="true"></span></button></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="deck-controls">
-          <div class="dots" id="dots" aria-hidden="true"></div>
-          <button class="next" id="next" type="button">Next question <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
-        <p class="deck-note">Real questions from the USCIS study list. Swipe or use the arrow keys.</p>
-        <p class="sr-only" id="cardLive" aria-live="polite"></p>
+        <p class="demo-cap"><b>Try it:</b> 5 real civics questions from the USCIS list.</p>
       </div>
     </section>
 
@@ -316,18 +308,8 @@
   </footer>
 </div>
 
-<script type="application/json" id="cards">
-{"answerLabel":"Answer","cards":[
-  ["What is the supreme law of the land?","The Constitution"],
-  ["How many U.S. senators are there?","One hundred (100)"],
-  ["We elect a U.S. senator for how many years?","Six (6)"],
-  ["Who was the first President of the United States?","George Washington"],
-  ["How many amendments does the U.S. Constitution have?","Twenty-seven (27)"],
-  ["Name the three branches of government.","Legislative, executive and judicial"],
-  ["Why does the flag have 13 stripes?","Because there were 13 original colonies"],
-  ["When do we celebrate Independence Day?","July 4"]
-]}
-</script>
+<script type="application/json" id="quiz-data">{"labels":{"title":"Practice test","of":"Question {n} of {t}","choose":"Choose an answer","right":"Correct!","wrong":"Not quite.","answerIs":"The answer is:","next":"Next question","finish":"See my score","scoreOf":"{s} of {t} correct","levels":[["Keep going!","Everyone starts somewhere. The app shows every answer and explains why."],["Keep going!","Everyone starts somewhere. The app shows every answer and explains why."],["Keep going!","Everyone starts somewhere. The app shows every answer and explains why."],["Good start!","A few minutes a day with the app will get you there."],["Great job!","You're almost there. Close the gaps with 20 full practice tests."],["Perfect score!","You know your stuff. Stay sharp with all 128 questions."]],"passed":"That's a passing score (60%) in the real interview.","failed":"In the real interview you need 60% to pass.","cta":"Get all 128 questions in the app","again":"Try 5 more questions","inEnglish":"In English:","ios":["Download on the","App Store"],"android":["Get it on","Google Play"]},"links":{"ios":"https://apps.apple.com/us/app/id1615982636","android":"https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest"},"questions":[{"q":"What is the supreme law of the land?","o":["The Constitution","The Declaration of Independence","The Emancipation Proclamation","The Federalist Papers"],"a":0,"w":"The Constitution sets up the government and protects the basic rights of Americans. No law can go against it."},{"q":"How many U.S. senators are there?","o":["50","100","435","538"],"a":1,"w":"Each of the 50 states elects two senators."},{"q":"We elect a U.S. senator for how many years?","o":["Two (2)","Four (4)","Six (6)","Eight (8)"],"a":2,"w":"Representatives serve two years and the President serves four."},{"q":"Who was the first President of the United States?","o":["John Adams","George Washington","Thomas Jefferson","Abraham Lincoln"],"a":1,"w":"George Washington led the army in the Revolutionary War and became President in 1789."},{"q":"How many amendments does the U.S. Constitution have?","o":["Ten (10)","Twenty-seven (27)","Thirty-three (33)","Fifty (50)"],"a":1,"w":"The first ten amendments are called the Bill of Rights."},{"q":"What are the two parts of the U.S. Congress?","o":["The Senate and the House of Representatives","The President and the Cabinet","The Supreme Court and the federal courts","The Senate and the Cabinet"],"a":0,"w":"Together, the Senate and the House make the federal laws."},{"q":"Why does the flag have 13 stripes?","o":["For the first 13 presidents","Because there were 13 original colonies","For the 13 founding fathers","For the 13 largest states"],"a":1,"w":"The stripes stand for the 13 original colonies. The 50 stars stand for the 50 states."},{"q":"When do we celebrate Independence Day?","o":["July 4","January 1","November 11","September 17"],"a":0,"w":"The Declaration of Independence was adopted on July 4, 1776."},{"q":"Who is the Commander in Chief of the U.S. military?","o":["The Secretary of Defense","The President","The Vice President","The Speaker of the House"],"a":1,"w":"The Constitution gives this role to the President."},{"q":"What ocean is on the East Coast of the United States?","o":["Pacific Ocean","Atlantic Ocean","Indian Ocean","Arctic Ocean"],"a":1,"w":"The Pacific Ocean is on the West Coast."}]}</script>
+<script src="/assets/quiz.js" defer></script>
 <script src="/assets/home.js" defer></script>
 </body>
 </html>
