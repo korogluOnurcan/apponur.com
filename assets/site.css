@@ -91,6 +91,7 @@ a{color:inherit}
 .stack::before,.stack::after{content:"";position:absolute;inset:10px 0;border-radius:22px;background:var(--card);border:1.5px solid var(--line)}
 .stack::before{transform:rotate(-3.5deg) translate(-6px,6px);opacity:.75}
 .stack::after{transform:rotate(2deg) translate(6px,3px);opacity:.9}
+@media (max-width:600px){.stack::before{transform:rotate(-2deg) translate(-3px,5px)}.stack::after{transform:rotate(1.2deg) translate(3px,3px)}}
 .card{position:relative;z-index:1;display:block;width:100%;perspective:1400px;cursor:pointer;border:0;padding:0;background:none;text-align:left;color:inherit;font:inherit;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
 .card:focus-visible{outline-offset:6px;border-radius:24px}
 .card-inner{display:grid;transition:transform .5s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
