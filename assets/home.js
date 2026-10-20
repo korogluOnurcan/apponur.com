@@ -27,23 +27,59 @@
     live.textContent = on ? data.answerLabel + ": " + a.textContent : q.textContent;
   }
 
+  function advance(dir) {
+    idx = (idx + dir + data.cards.length) % data.cards.length;
+    render();
+    live.textContent = q.textContent;
+  }
+
+  // Turn the card back to the question side without animating it.
+  function unflipNow() {
+    var inner = card.querySelector(".card-inner");
+    inner.style.transition = "none";
+    card.classList.remove("flipped");
+    card.setAttribute("aria-pressed", "false");
+    void inner.offsetWidth;
+    inner.style.transition = "";
+  }
+
   // Swap the text only while the question side faces the viewer,
   // so the next answer never shows during the flip back.
   function step(dir) {
     if (busy) return;
-    var go = function () {
-      idx = (idx + dir + data.cards.length) % data.cards.length;
-      render();
-      live.textContent = q.textContent;
-    };
     if (card.classList.contains("flipped")) {
       busy = true;
       card.classList.remove("flipped");
       card.setAttribute("aria-pressed", "false");
-      setTimeout(function () { go(); busy = false; }, reduced ? 0 : 480);
+      setTimeout(function () { advance(dir); busy = false; }, reduced ? 0 : 480);
     } else {
-      go();
+      advance(dir);
     }
+  }
+
+  // After a swipe the card leaves on the side it was thrown to
+  // and the next one comes in from the other side.
+  function swipeOut(dir) {
+    if (reduced) { unflipNow(); advance(dir); setOffset(0); return; }
+    busy = true;
+    card.style.transition = "transform .2s ease-in, opacity .2s";
+    card.style.transform = "translateX(" + (-dir * 110) + "%) rotate(" + (-dir * 8) + "deg)";
+    card.style.opacity = "0";
+    setTimeout(function () {
+      card.style.transition = "none";
+      unflipNow();
+      advance(dir);
+      card.style.transform = "translateX(" + (dir * 40) + "%)";
+      void card.offsetWidth;
+      card.style.transition = "transform .25s ease-out, opacity .25s";
+      card.style.transform = "";
+      card.style.opacity = "";
+      setTimeout(function () { card.style.transition = ""; busy = false; }, 260);
+    }, 200);
+  }
+
+  function setOffset(dx) {
+    card.style.transform = dx ? "translateX(" + dx + "px) rotate(" + (dx / 25) + "deg)" : "";
   }
 
   card.addEventListener("click", flip);
@@ -53,16 +89,43 @@
     if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
   });
 
-  // Swipe left or right on touch screens.
-  var x0 = null, swiped = false;
-  card.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; swiped = false; }, { passive: true });
-  card.addEventListener("touchend", function (e) {
-    if (x0 === null) return;
-    var dx = e.changedTouches[0].clientX - x0;
-    x0 = null;
-    if (Math.abs(dx) > 50) { swiped = true; step(dx < 0 ? 1 : -1); }
+  // Swipe with a finger or drag with the mouse: Pointer Events cover both.
+  // A short horizontal move still counts as a tap; a vertical move scrolls the page.
+  var drag = null, swallowClick = false;
+  card.addEventListener("pointerdown", function (e) {
+    swallowClick = false;
+    if (busy || (e.pointerType === "mouse" && e.button !== 0)) return;
+    drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, moving: false };
   });
-  card.addEventListener("click", function (e) { if (swiped) { e.stopImmediatePropagation(); swiped = false; } }, true);
+  card.addEventListener("pointermove", function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    if (!drag.moving) {
+      if (Math.abs(dx) < 8) return;
+      if (Math.abs(dy) > Math.abs(dx)) { drag = null; return; }
+      drag.moving = true;
+      try { card.setPointerCapture(e.pointerId); } catch (err) {}
+      card.classList.add("dragging");
+    }
+    drag.dx = dx;
+    setOffset(dx);
+  });
+  function endDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    if (!d.moving) return;
+    swallowClick = true;
+    card.classList.remove("dragging");
+    if (e.type === "pointerup" && Math.abs(d.dx) > Math.min(90, card.offsetWidth * 0.22)) swipeOut(d.dx < 0 ? 1 : -1);
+    else setOffset(0);
+  }
+  card.addEventListener("pointerup", endDrag);
+  card.addEventListener("pointercancel", endDrag);
+  // A drag ends with a click on the card; do not let it flip the card.
+  card.addEventListener("click", function (e) {
+    if (swallowClick) { e.stopImmediatePropagation(); e.preventDefault(); swallowClick = false; }
+  }, true);
+  card.addEventListener("dragstart", function (e) { e.preventDefault(); });
 
   render();
 
