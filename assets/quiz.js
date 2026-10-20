@@ -1,5 +1,6 @@
-// Home-page demo: the app's own test screen and result screen, with the app's questions,
-// colors and motion (fragment_question + TestQuestionPage, fragment_result + TestResultPage).
+// Home-page demo: the app's own test screen and result screen with the app's free Test 1
+// (the 20 questions free users get), colors and motion (fragment_question + TestQuestionPage,
+// fragment_result + TestResultPage). A tap anywhere that is not a button opens the store.
 (function () {
   "use strict";
   var root = document.getElementById("quiz");
@@ -81,10 +82,12 @@
   var page = null, busy = false, Q = null, slide = null;
   var live = el("p", "sr-only"); live.setAttribute("aria-live", "polite");
 
-  function pick() {
-    var pool = D.questions.slice();
-    for (var k = pool.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)), t = pool[k]; pool[k] = pool[j]; pool[j] = t; }
-    return pool.slice(0, N);
+  // The visitor's store: Google Play on Android, the App Store everywhere else.
+  var STORE = /android/i.test(navigator.userAgent) ? D.links.android : D.links.ios;
+  function openStore() {
+    var a = document.createElement("a");
+    a.href = STORE; a.target = "_blank"; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.remove();
   }
   function counts() {
     var c = 0, w = 0;
@@ -396,7 +399,7 @@
     back.addEventListener("click", function (e) { openReview(idx, e.detail === 0); });
     review.addEventListener("click", function (e) { openReview(0, e.detail === 0); });
     tryAgain.addEventListener("click", function (e) { if (!busy) start(questions, false, e.detail === 0); });
-    next.addEventListener("click", function (e) { if (!busy) start(pick(), true, e.detail === 0); });
+    next.addEventListener("click", openStore);   // the next tests are Premium in the app
 
     var draw = drawRing(svg, c / N, w / N, PASS / N);
     p._onShown = function () {
@@ -582,6 +585,16 @@
     if (k >= 0 && mode === "test") { e.preventDefault(); choose(idx, k, questions[idx].o[k]); }
   });
 
+  // Everything in the phone that is not a button or a link takes the visitor to the store.
+  var device = root.closest(".phone") || root;
+  device.classList.add("to-store");
+  device.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("button, a")) return;
+    var sel = window.getSelection && window.getSelection();
+    if (sel && String(sel).length) return;   // selecting text is not a tap
+    openStore();
+  });
+
   while (root.firstChild) root.removeChild(root.firstChild);
-  start(pick(), true, false);
+  start(D.questions.slice(0, N), true, false);
 })();
