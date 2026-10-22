@@ -3,16 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Get the US Citizenship Test app | Apponur</title>
-<meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0F2C52">
+<title>US Citizenship Test 2026 app | Apponur</title>
+<meta name="title-en" content="US Citizenship Test 2026 app | Apponur">
+<meta name="title-es" content="Examen de Ciudadanía de EE. UU. | Apponur">
+<meta name="description" content="Download the US Citizenship Test 2026 app for iPhone and Android, in English or Spanish.">
+<link rel="canonical" href="https://apponur.com/app/">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#F6F8FB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1729" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Apponur">
+<meta property="og:url" content="https://apponur.com/app/">
+<meta property="og:title" content="US Citizenship Test 2026 app | Apponur">
+<meta property="og:image" content="https://apponur.com/assets/og-image.png">
 <link rel="icon" href="/favicon.ico?v=3" sizes="32x32">
+<link rel="icon" href="/assets/brand/favicon.svg?v=3" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png?v=3">
+<link rel="manifest" href="/site.webmanifest?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
 <script>
+// Phones go straight to the right store for their system language; everyone else sees this page.
 (function () {
   var IOS = { en: "https://apps.apple.com/us/app/id1615982636", es: "https://apps.apple.com/us/app/id1617090965" };
   var AND = { en: "https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest",
               es: "https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest" };
   var q = new URLSearchParams(location.search);
+  if (q.get("stay") === "1") return;
   var langs = navigator.languages || [navigator.language || ""];
   var lang = q.get("lang") || (langs.some(function (l) { return /^es/i.test(l); }) ? "es" : "en");
   if (lang !== "es") lang = "en";
@@ -20,52 +39,110 @@
   var isAndroid = /Android/i.test(ua);
   var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   var target = isAndroid ? AND[lang] : isIOS ? IOS[lang] : null;
-  // Keep campaign tags so store analytics can attribute the install.
-  if (target) {
-    var utm = []; q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(k + "=" + encodeURIComponent(v)); });
-    if (utm.length && isAndroid) target += "&referrer=" + encodeURIComponent(utm.join("&"));
-    location.replace(target);
-  }
-  window.__appLang = lang;
+  if (!target) return;
+  var utm = []; q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(k + "=" + encodeURIComponent(v)); });
+  if (utm.length && isAndroid) target += "&referrer=" + encodeURIComponent(utm.join("&"));
+  location.replace(target);
 })();
 </script>
+<script src="/assets/lang.js"></script>
 <style>
-:root{--navy:#0F2C52;--paper:#F6F8FB;--ink:#16243A;--ink2:#5B6B82;--line:#D4DCE7}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px}
-main{max-width:420px;width:100%;text-align:center}
-img{width:96px;height:96px;border-radius:24px;box-shadow:0 10px 30px rgba(15,44,82,.2)}
-h1{font-size:1.5rem;margin:20px 0 6px}
-p{color:var(--ink2);margin:0 0 24px;line-height:1.5}
-.g{display:grid;gap:10px}
-a{display:block;padding:14px 18px;border-radius:12px;text-decoration:none;font-weight:600;background:var(--navy);color:#fff}
-a.alt{background:#fff;color:var(--navy);border:1px solid var(--line)}
-small{display:block;margin-top:20px;color:var(--ink2)}
-small a{display:inline;padding:0;background:none;color:var(--navy);text-decoration:underline;font-weight:600}
+.dl-main{display:block}
+.dl-main .dl-page{max-width:760px;margin:0 auto}
+.dl-hero{text-align:center;padding:24px 0 8px}
+.dl-hero .dl-icon{width:112px;height:112px;border-radius:26px;border:1px solid var(--line);box-shadow:0 14px 40px rgba(15,44,82,.14);display:none}
+html[lang="en"] .dl-hero [data-lang-img="en"],html[lang="es"] .dl-hero [data-lang-img="es"]{display:inline-block}
+.dl-hero .kicker{margin:22px 0 8px;font-weight:600;color:var(--red);letter-spacing:.02em;font-size:14px;text-transform:uppercase}
+.dl-hero h1{margin:0 0 14px}
+.dl-hero .lede{color:var(--muted);font-size:18px;max-width:46ch;margin:0 auto 26px}
+.dl-hero .stores{justify-content:center}
+.dl-switch{margin:20px 0 0;color:var(--muted);font-size:15px}
+.dl-switch a{font-weight:600}
+.dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:44px 0 0}
+.dl-grid>div{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:20px}
+.dl-grid b{display:block;font-size:16px;margin-bottom:6px}
+.dl-grid p{margin:0;color:var(--muted);font-size:15px}
+@media(max-width:640px){.dl-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<main>
-  <img src="/assets/brand/app-icon-1024.png" alt="US Citizenship Test app icon">
-  <h1 id="h">US Citizenship Test 2025</h1>
-  <p id="p">Study all 128 official civics questions, practice the interview and track your progress. Free download.</p>
-  <div class="g">
-    <a id="ios" href="https://apps.apple.com/us/app/id1615982636">Download on the App Store</a>
-    <a id="and" class="alt" href="https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest">Get it on Google Play</a>
-  </div>
-  <small id="sw"><a href="/app/?lang=es">¿Prefieres la versión en español?</a></small>
-</main>
-<script>
-if (window.__appLang === "es") {
-  document.documentElement.lang = "es";
-  document.getElementById("h").textContent = "Examen de Ciudadanía 2025";
-  document.getElementById("p").textContent = "Estudia las 128 preguntas oficiales de educación cívica, practica la entrevista y sigue tu progreso. Descarga gratis.";
-  document.getElementById("ios").href = "https://apps.apple.com/us/app/id1617090965";
-  document.getElementById("ios").textContent = "Descargar en el App Store";
-  document.getElementById("and").href = "https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest";
-  document.getElementById("and").textContent = "Disponible en Google Play";
-  document.getElementById("sw").innerHTML = '<a href="/app/?lang=en">Prefer the English version?</a>';
-}
-</script>
+<a class="skip" href="#main" data-en="Skip to content" data-es="Saltar al contenido">Skip to content</a>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/" data-href-en="/" data-href-es="/es/" aria-label="Apponur"><img class="brand-mark" src="/assets/brand/mark.svg" alt="" width="25" height="44"><span class="brand-text"><span class="brand-name">Apponur</span><span class="brand-orn" aria-hidden="true"><i></i><b></b><i></i></span><span class="brand-tag" data-en="Your key to U.S. citizenship" data-es="Tu llave a la ciudadanía">Your key to U.S. citizenship</span></span></a>
+    <nav aria-label="Main">
+      <a class="navlink" href="/civics-test/" data-href-en="/civics-test/" data-href-es="/es/examen-civico/" data-en="Test guide" data-es="Guía del examen">Test guide</a>
+      <a class="navlink" href="/#apps" data-href-en="/#apps" data-href-es="/es/#apps" data-en="Apps" data-es="Aplicaciones">Apps</a>
+      <a class="navlink" href="/support/" aria-current="page" data-en="Support" data-es="Ayuda">Support</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="doc dl-main" id="main">
+    <article class="dl-page">
+      <div class="dl-hero">
+        <img class="dl-icon" data-lang-img="en" src="/assets/icon-en.png" alt="US Citizenship Test 2026 app icon" width="112" height="112">
+        <img class="dl-icon" data-lang-img="es" src="/assets/icon-es.png" alt="Examen de Ciudadanía de EE. UU. app icon" width="112" height="112">
+        <p class="kicker" data-en="Free app · iPhone and Android" data-es="App gratis · iPhone y Android">Free app · iPhone and Android</p>
+        <h1 data-en="US Citizenship Test 2026" data-es="Examen de Ciudadanía de EE. UU. 2026">US Citizenship Test 2026</h1>
+        <p class="lede" data-en="All 128 official civics questions for the 2025 test, with explanations, flashcards, 20 practice tests, audio and an interview simulator." data-es="Las 128 preguntas oficiales del examen de 2025, con explicaciones, tarjetas, 20 exámenes de práctica, audio y un simulador de entrevista.">All 128 official civics questions for the 2025 test, with explanations, flashcards, 20 practice tests, audio and an interview simulator.</p>
+        <div class="stores">
+          <a class="store ios" href="https://apps.apple.com/us/app/id1615982636" data-href-en="https://apps.apple.com/us/app/id1615982636" data-href-es="https://apps.apple.com/us/app/id1617090965"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c.02 2.43 2.13 3.24 2.15 3.25-.02.06-.34 1.15-1.11 2.28-.67.98-1.36 1.95-2.46 1.97-1.07.02-1.42-.64-2.65-.64-1.23 0-1.62.62-2.64.66-1.06.04-1.87-1.06-2.54-2.03-1.38-2-2.43-5.64-1.02-8.1.7-1.22 1.96-2 3.32-2.02 1.04-.02 2.02.7 2.65.7.64 0 1.82-.86 3.07-.74.52.02 1.99.21 2.93 1.59-.08.05-1.75 1.02-1.73 3.05zM14.36 4.98c.56-.68.94-1.63.84-2.57-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.57-.85 2.49.9.07 1.82-.46 2.38-1.14z"/></svg><span><small data-en="Download on the" data-es="Descargar en">Download on the</small><b>App Store</b></span></a>
+          <a class="store android" href="https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest" data-href-en="https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest" data-href-es="https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3.3v17.4c0 .3.17.56.42.68L13.6 12 4.42 2.62A.75.75 0 0 0 4 3.3zm10.68 7.62 2.5-2.5L6.1 2.1l8.58 8.82zm0 2.16L6.1 21.9l11.08-6.32-2.5-2.5zm5.97-2.04-2.4-1.37-2.73 2.33 2.73 2.33 2.4-1.37c.7-.4.7-1.52 0-1.92z"/></svg><span><small data-en="Get it on" data-es="Disponible en">Get it on</small><b>Google Play</b></span></a>
+        </div>
+        <p class="dl-switch"><span data-en="Prefer to study in Spanish?" data-es="¿Prefieres estudiar en inglés?">Prefer to study in Spanish?</span> <a href="/app/?lang=es&amp;stay=1" data-href-en="/app/?lang=es&amp;stay=1" data-href-es="/app/?lang=en&amp;stay=1" data-en="Get the Spanish app" data-es="Descarga la app en inglés">Get the Spanish app</a></p>
+      </div>
+
+      <section class="dl-grid" aria-label="What is inside">
+        <div><b data-en="2025 and 2008 tests" data-es="Exámenes 2025 y 2008">2025 and 2008 tests</b><p data-en="Study the version that matches your N-400 filing date." data-es="Estudia la versión que corresponde a la fecha de tu N-400.">Study the version that matches your N-400 filing date.</p></div>
+        <div><b data-en="Interview simulator" data-es="Simulador de entrevista">Interview simulator</b><p data-en="Hear the questions the way an officer asks them and answer out loud." data-es="Escucha las preguntas como las hace el oficial y responde en voz alta.">Hear the questions the way an officer asks them and answer out loud.</p></div>
+        <div><b data-en="Your state's answers" data-es="Respuestas de tu estado">Your state's answers</b><p data-en="Senators, representative, governor and capital, filled in for where you live." data-es="Senadores, representante, gobernador y capital según donde vives.">Senators, representative, governor and capital, filled in for where you live.</p></div>
+        <div><b data-en="Reading and writing" data-es="Lectura y escritura">Reading and writing</b><p data-en="Practice the English test sentences from the official USCIS vocabulary." data-es="Practica las oraciones del examen de inglés con el vocabulario oficial de USCIS.">Practice the English test sentences from the official USCIS vocabulary.</p></div>
+      </section>
+
+      <p class="updated"><a href="/civics-test/" data-href-en="/civics-test/" data-href-es="/es/examen-civico/" data-en="Read the free citizenship test guide" data-es="Lee la guía gratuita del examen">Read the free citizenship test guide</a> <span data-en="before you start." data-es="antes de empezar.">before you start.</span></p>
+    </article>
+  </main>
+
+  <footer>
+    <div class="cols">
+      <div>
+        <a class="brand" href="/" data-href-en="/" data-href-es="/es/"><img class="brand-mark" src="/assets/brand/mark.svg" alt="" width="25" height="44"><span class="brand-text"><span class="brand-name">Apponur</span><span class="brand-orn" aria-hidden="true"><i></i><b></b><i></i></span><span class="brand-tag" data-en="Your key to U.S. citizenship" data-es="Tu llave a la ciudadanía">Your key to U.S. citizenship</span></span></a>
+        <p class="about" data-en="Study apps for the U.S. citizenship test, made by an independent developer." data-es="Apps de estudio para el examen de ciudadanía de EE. UU., hechas por un desarrollador independiente.">Study apps for the U.S. citizenship test, made by an independent developer.</p>
+      </div>
+      <div>
+        <h4>Apps</h4>
+        <ul>
+          <li><a href="https://apps.apple.com/us/app/id1615982636" data-en="iPhone (English)" data-es="iPhone (inglés)">iPhone (English)</a></li>
+          <li><a href="https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest" data-en="Android (English)" data-es="Android (inglés)">Android (English)</a></li>
+          <li><a href="https://apps.apple.com/us/app/id1617090965" data-en="iPhone (Spanish)" data-es="iPhone (español)">iPhone (Spanish)</a></li>
+          <li><a href="https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest" data-en="Android (Spanish)" data-es="Android (español)">Android (Spanish)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-en="Learn" data-es="Aprende">Learn</h4>
+        <ul>
+          <li><a href="/civics-test/" data-href-en="/civics-test/" data-href-es="/es/examen-civico/" data-en="Citizenship test guide" data-es="Guía del examen de ciudadanía">Citizenship test guide</a></li>
+          <li><a href="/civics-test/#sample" data-href-en="/civics-test/#sample" data-href-es="/es/examen-civico/#ejemplos" data-en="Sample civics questions" data-es="Preguntas cívicas de ejemplo">Sample civics questions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-en="Company" data-es="Empresa">Company</h4>
+        <ul>
+          <li><a href="/support/" data-en="Support" data-es="Ayuda">Support</a></li>
+          <li><a href="/privacy/" data-en="Privacy policy" data-es="Política de privacidad">Privacy policy</a></li>
+          <li><a href="/terms/" data-en="Terms of use" data-es="Términos de uso">Terms of use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Apponur</span>
+      <p data-en="Apponur is an independent developer. Our apps are not affiliated with or endorsed by USCIS or any government agency." data-es="Apponur es un desarrollador independiente. Nuestras apps no están afiliadas ni respaldadas por USCIS ni por ninguna agencia del gobierno.">Apponur is an independent developer. Our apps are not affiliated with or endorsed by USCIS or any government agency.</p>
+    </div>
+  </footer>
+</div>
 </body>
 </html>
