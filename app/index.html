@@ -25,11 +25,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <script>
-// Phones go straight to the right store for their system language; everyone else sees this page.
+// Phones: the page stays loaded and the store opens on top of it, so closing the store shows this page.
 (function () {
-  var IOS = { en: "https://apps.apple.com/us/app/id1615982636", es: "https://apps.apple.com/us/app/id1617090965" };
-  var AND = { en: "https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest",
-              es: "https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest" };
+  var IOS = { en: "id1615982636", es: "id1617090965" };
+  var AND = { en: "com.apponur.uscitizenshiptest", es: "com.apponur.spanishuscitizenshiptest" };
   var q = new URLSearchParams(location.search);
   if (q.get("stay") === "1") return;
   var langs = navigator.languages || [navigator.language || ""];
@@ -38,11 +37,15 @@
   var ua = navigator.userAgent || "";
   var isAndroid = /Android/i.test(ua);
   var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  var target = isAndroid ? AND[lang] : isIOS ? IOS[lang] : null;
-  if (!target) return;
+  if (!isAndroid && !isIOS) return;
   var utm = []; q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(k + "=" + encodeURIComponent(v)); });
-  if (utm.length && isAndroid) target += "&referrer=" + encodeURIComponent(utm.join("&"));
-  location.replace(target);
+  // App-scheme links open the store app without unloading this page.
+  var target = isAndroid
+    ? "market://details?id=" + AND[lang] + (utm.length ? "&referrer=" + encodeURIComponent(utm.join("&")) : "")
+    : "itms-apps://apps.apple.com/us/app/" + IOS[lang];
+  window.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () { location.href = target; }, 150);
+  });
 })();
 </script>
 <script src="/assets/lang.js"></script>
