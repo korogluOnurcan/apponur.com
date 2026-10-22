@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get the US Citizenship Test app | Apponur</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F2C52">
+<link rel="icon" href="/favicon.ico?v=3" sizes="32x32">
+<script>
+(function () {
+  var IOS = { en: "https://apps.apple.com/us/app/id1615982636", es: "https://apps.apple.com/us/app/id1617090965" };
+  var AND = { en: "https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest",
+              es: "https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest" };
+  var q = new URLSearchParams(location.search);
+  var langs = navigator.languages || [navigator.language || ""];
+  var lang = q.get("lang") || (langs.some(function (l) { return /^es/i.test(l); }) ? "es" : "en");
+  if (lang !== "es") lang = "en";
+  var ua = navigator.userAgent || "";
+  var isAndroid = /Android/i.test(ua);
+  var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var target = isAndroid ? AND[lang] : isIOS ? IOS[lang] : null;
+  // Keep campaign tags so store analytics can attribute the install.
+  if (target) {
+    var utm = []; q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(k + "=" + encodeURIComponent(v)); });
+    if (utm.length && isAndroid) target += "&referrer=" + encodeURIComponent(utm.join("&"));
+    location.replace(target);
+  }
+  window.__appLang = lang;
+})();
+</script>
+<style>
+:root{--navy:#0F2C52;--paper:#F6F8FB;--ink:#16243A;--ink2:#5B6B82;--line:#D4DCE7}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px}
+main{max-width:420px;width:100%;text-align:center}
+img{width:96px;height:96px;border-radius:24px;box-shadow:0 10px 30px rgba(15,44,82,.2)}
+h1{font-size:1.5rem;margin:20px 0 6px}
+p{color:var(--ink2);margin:0 0 24px;line-height:1.5}
+.g{display:grid;gap:10px}
+a{display:block;padding:14px 18px;border-radius:12px;text-decoration:none;font-weight:600;background:var(--navy);color:#fff}
+a.alt{background:#fff;color:var(--navy);border:1px solid var(--line)}
+small{display:block;margin-top:20px;color:var(--ink2)}
+small a{display:inline;padding:0;background:none;color:var(--navy);text-decoration:underline;font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <img src="/assets/brand/app-icon-1024.png" alt="US Citizenship Test app icon">
+  <h1 id="h">US Citizenship Test 2025</h1>
+  <p id="p">Study all 128 official civics questions, practice the interview and track your progress. Free download.</p>
+  <div class="g">
+    <a id="ios" href="https://apps.apple.com/us/app/id1615982636">Download on the App Store</a>
+    <a id="and" class="alt" href="https://play.google.com/store/apps/details?id=com.apponur.uscitizenshiptest">Get it on Google Play</a>
+  </div>
+  <small id="sw"><a href="/app/?lang=es">¿Prefieres la versión en español?</a></small>
+</main>
+<script>
+if (window.__appLang === "es") {
+  document.documentElement.lang = "es";
+  document.getElementById("h").textContent = "Examen de Ciudadanía 2025";
+  document.getElementById("p").textContent = "Estudia las 128 preguntas oficiales de educación cívica, practica la entrevista y sigue tu progreso. Descarga gratis.";
+  document.getElementById("ios").href = "https://apps.apple.com/us/app/id1617090965";
+  document.getElementById("ios").textContent = "Descargar en el App Store";
+  document.getElementById("and").href = "https://play.google.com/store/apps/details?id=com.apponur.spanishuscitizenshiptest";
+  document.getElementById("and").textContent = "Disponible en Google Play";
+  document.getElementById("sw").innerHTML = '<a href="/app/?lang=en">Prefer the English version?</a>';
+}
+</script>
+</body>
+</html>
