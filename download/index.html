@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download | Apponur</title>
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#F6F8FB">
+<link rel="icon" href="/favicon.ico?v=3" sizes="32x32">
+<script>
+// /download/ opens the right store for the phone's platform and language, then shows the home page behind it.
+// The home page itself never opens a store.
+(function () {
+  var IOS = { en: "id1615982636", es: "id1617090965" };
+  var AND = { en: "com.apponur.uscitizenshiptest", es: "com.apponur.spanishuscitizenshiptest" };
+  var q = new URLSearchParams(location.search);
+  var langs = navigator.languages || [navigator.language || ""];
+  var lang = q.get("lang") || (langs.some(function (l) { return /^es/i.test(l); }) ? "es" : "en");
+  if (lang !== "es") lang = "en";
+  var home = lang === "es" ? "/es/" : "/";
+  var ua = navigator.userAgent || "";
+  var isAndroid = /Android/i.test(ua);
+  var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (!isAndroid && !isIOS) { location.replace(home); return; }
+  var utm = []; q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(k + "=" + encodeURIComponent(v)); });
+  var store = isAndroid
+    ? "market://details?id=" + AND[lang] + (utm.length ? "&referrer=" + encodeURIComponent(utm.join("&")) : "")
+    : "itms-apps://apps.apple.com/us/app/" + IOS[lang];
+  // Open the store app first; the page then moves to the home page, which is what the visitor sees when they come back.
+  location.href = store;
+  setTimeout(function () { location.replace(home); }, 600);
+})();
+</script>
+<style>body{margin:0;background:#F6F8FB}</style>
+</head>
+<body>
+<noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
+</body>
+</html>
