@@ -19,6 +19,11 @@ Nothing is published on the word of a single source. Every fact is read from two
   Governors                Open States (openstates/people)       USA.gov state pages
   Capitals                 fixed table below (they don't change) checked against the previous file
 
+Each person also gets a "photo" URL when one is found: Congress.gov's member photo for senators and
+representatives (the unitedstates/images copy without the Congress.gov API), Wikidata's image for the
+President, Vice President, Chief Justice and governors (Open States' for governors Wikidata has none for).
+Photos are only shown next to the names: a new photo alone doesn't count as a change of the facts.
+
 When the sources disagree, or one can't be reached, the previous value of that fact is kept, the run
 is reported as failed (exit code 1) and GitHub emails the repository owner. A file is never written
 when a check of the whole file fails (wrong number of states, seats, senators...): exit code 2.
@@ -66,6 +71,7 @@ URLS = {
     "wikidata": "https://query.wikidata.org/sparql",
     "openstates": "https://codeload.github.com/openstates/people/tar.gz/refs/heads/main",
     "usagov": "https://www.usa.gov/states/{slug}",
+    "photos": "https://unitedstates.github.io/images/congress/225x275/{bioguide}.jpg",
 }
 
 # Shown in the apps next to each fact. Only sources a run actually read are listed with a fact.
@@ -179,17 +185,89 @@ def page_title(raw):
 def wikidata_holders(office_id):
     """Living people holding the office: a start date and no end date, instances of human."""
     query = (
-        "SELECT ?person ?personLabel ?start WHERE { ?person wdt:P31 wd:Q5; p:P39 ?st. "
+        "SELECT ?person ?personLabel ?start (SAMPLE(?image) AS ?img) WHERE { ?person wdt:P31 wd:Q5; p:P39 ?st. "
         "?st ps:P39 wd:%s; pq:P580 ?start. FILTER NOT EXISTS { ?st pq:P582 ?end } "
-        "FILTER NOT EXISTS { ?person wdt:P570 ?died } "
-        'SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } }' % office_id
+        "FILTER NOT EXISTS { ?person wdt:P570 ?died } OPTIONAL { ?person wdt:P18 ?image } "
+        'SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } } '
+        "GROUP BY ?person ?personLabel ?start" % office_id
     )
     url = URLS["wikidata"] + "?" + urllib.parse.urlencode({"query": query, "format": "json"})
     data = fetch_json(url)
     return [
-        {"name": row["personLabel"]["value"], "start": row["start"]["value"][:10]}
+        {"name": row["personLabel"]["value"], "start": row["start"]["value"][:10],
+         "photo": commons_photo(row.get("img", {}).get("value"))}
         for row in data["results"]["bindings"]
     ]
+
+
+def wikidata_governors():
+    """State code → [(name, photo)] of sitting governors on Wikidata ("Governor of <state>", no end date)."""
+    labels = " ".join('"Governor of %s"@en' % name for code, name in STATES.items() if code != "DC")
+    query = (
+        "SELECT ?label ?personLabel (SAMPLE(?image) AS ?img) WHERE { VALUES ?label { %s } "
+        "?office rdfs:label ?label. ?person wdt:P31 wd:Q5; p:P39 ?st. ?st ps:P39 ?office; pq:P580 ?start. "
+        "FILTER NOT EXISTS { ?st pq:P582 ?end } FILTER NOT EXISTS { ?person wdt:P570 ?died } "
+        "OPTIONAL { ?person wdt:P18 ?image } "
+        'SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } } GROUP BY ?label ?personLabel' % labels
+    )
+    url = URLS["wikidata"] + "?" + urllib.parse.urlencode({"query": query, "format": "json"})
+    codes = {name: code for code, name in STATES.items()}
+    governors = {}
+    for row in fetch_json(url)["results"]["bindings"]:
+        code = codes.get(row["label"]["value"][len("Governor of "):])
+        if code:
+            governors.setdefault(code, []).append(
+                (row["personLabel"]["value"], commons_photo(row.get("img", {}).get("value"))))
+    if len(governors) < 40:
+        raise SourceError("Wikidata lists governors for %d states" % len(governors))
+    return governors
+
+
+def commons_photo(url):
+    """A Wikimedia Commons file as a 320-pixel-wide image over HTTPS."""
+    if not url or "Special:FilePath/" not in url:
+        return None
+    return "https://commons.wikimedia.org/wiki/Special:FilePath/%s?width=320" % url.split("Special:FilePath/", 1)[1]
+
+
+def photo_url(url):
+    """Only plain HTTPS image links go into the file."""
+    if not url or not re.fullmatch(r"https://[^\s\"'<>]{8,400}", url):
+        return None
+    return url
+
+
+# Hosts whose member photos are small and made for linking; any other photo is checked before it's used.
+TRUSTED_PHOTO_HOSTS = ("https://www.congress.gov/img/member/", "https://commons.wikimedia.org/wiki/Special:FilePath/")
+MAX_PHOTO_BYTES = 1_500_000
+_photo_checks = {}
+
+
+def reachable_photo(url):
+    """An image the apps can download: answers with an image, not too large (a state's 7 MB press photo isn't)."""
+    if url.startswith(TRUSTED_PHOTO_HOSTS):
+        return True
+    if url not in _photo_checks:
+        ok = False
+        try:
+            request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(request, timeout=20) as response:
+                size = int(response.headers.get("Content-Length") or 0)
+                ok = response.status == 200 and response.headers.get_content_type().startswith("image/") \
+                    and 0 < size <= MAX_PHOTO_BYTES
+        except (urllib.error.URLError, OSError, ValueError):
+            ok = False
+        _photo_checks[url] = ok
+    return _photo_checks[url]
+
+
+def with_photo(person, photo):
+    """The person with its photo (none: without one)."""
+    person = {k: v for k, v in person.items() if k != "photo"}
+    photo = photo_url(photo)
+    if photo and reachable_photo(photo):
+        person["photo"] = photo
+    return person
 
 
 def wikidata_senators():
@@ -306,6 +384,14 @@ def current_term(person, kind, today):
     return None
 
 
+def holder_photo(holders, name):
+    """The Wikidata image of the holder with this name, if any."""
+    for holder in holders or []:
+        if same_person(holder["name"], name) and holder.get("photo"):
+            return holder["photo"]
+    return None
+
+
 def executive_fact(run, executive, whitehouse_lines, kind, title):
     """President or Vice President: the current term in executive.json, confirmed by the White House."""
     holders = [(p, current_term(p, kind, run.today)) for p in executive]
@@ -359,6 +445,7 @@ def speaker_fact(run, speaker_raw, wikidata, legislators):
         "answers": answer_variants(name),
         "party": party_name(members[0]["terms"][-1].get("party")),
         "since": holders[0]["start"],
+        "bioguide": members[0]["id"]["bioguide"],
     }
 
 
@@ -383,13 +470,14 @@ def court_facts(run, scotus_raw, chief_wikidata, associate_wikidata):
         run.note("Wikidata counts %d associate justices, supremecourt.gov %d (kept supremecourt.gov)"
                   % (len(associate_wikidata), len(associates)))
     return (
-        {"name": chief, "answers": answer_variants(chief), "since": chief_wikidata[0]["start"]},
+        with_photo({"name": chief, "answers": answer_variants(chief), "since": chief_wikidata[0]["start"]},
+                   chief_wikidata[0].get("photo")),
         justices,
     )
 
 
 def congress_members(api_key):
-    """Current members from the Congress.gov API: bioguide id → (chamber, state code, district)."""
+    """Current members from the Congress.gov API: bioguide id → (chamber, state code, district, photo)."""
     codes = {name: code for code, name in STATES.items()}
     members, offset = {}, 0
     while True:
@@ -403,7 +491,8 @@ def congress_members(api_key):
             chamber = "sen" if terms[-1].get("chamber") == "Senate" else "rep"
             code = codes.get(member.get("state"))
             if code:
-                members[member["bioguideId"]] = (chamber, code, member.get("district") or 0)
+                image = (member.get("depiction") or {}).get("imageUrl")
+                members[member["bioguideId"]] = (chamber, code, member.get("district") or 0, image)
         offset += 250
         if offset >= (data.get("pagination") or {}).get("count", 0) or not data.get("members"):
             break
@@ -456,9 +545,18 @@ def congress_facts(run, legislators, clerk_seats, congress_api, wikidata_sens):
 
     api_senators = {}
     if congress_api is not None:
-        for bioguide, (chamber, code, _) in congress_api.items():
+        for bioguide, (chamber, code, _, _) in congress_api.items():
             if chamber == "sen":
                 api_senators.setdefault(code, set()).add(bioguide)
+
+    def member_photo(bioguide, name, previous_people):
+        """Congress.gov's photo; without the API, the one from before or the unitedstates/images copy."""
+        if congress_api is not None and bioguide in congress_api and congress_api[bioguide][3]:
+            return congress_api[bioguide][3]
+        for person in previous_people:
+            if person and person.get("name") == name and person.get("photo"):
+                return person["photo"]
+        return URLS["photos"].format(bioguide=bioguide)
 
     result = {}
     for code in STATES:
@@ -487,7 +585,11 @@ def congress_facts(run, legislators, clerk_seats, congress_api, wikidata_sens):
             run.issue("%s senators: no second source reachable, kept the previous list" % code)
             sen_ok = False
         if sen_ok:
-            senator_list = [{"name": s["name"], "party": s["party"]} for s in senators]
+            senator_list = [
+                with_photo({"name": s["name"], "party": s["party"]},
+                           member_photo(s["bioguide"], s["name"], previous.get("senators") or []))
+                for s in senators
+            ]
         elif "senators" in previous:
             senator_list = previous["senators"]
         else:
@@ -498,7 +600,8 @@ def congress_facts(run, legislators, clerk_seats, congress_api, wikidata_sens):
             seat = clerk_seats.get(("DC", 0))
             listed = by_state["DC"]["rep"].get(0)
             if seat and listed and seat["bioguide"] == listed["bioguide"]:
-                delegate = {"name": listed["name"], "party": listed["party"], "title": "Delegate"}
+                delegate = with_photo({"name": listed["name"], "party": listed["party"], "title": "Delegate"},
+                                      member_photo(listed["bioguide"], listed["name"], [previous.get("delegate")]))
             elif seat is None and listed is None:
                 delegate = None
             else:
@@ -514,7 +617,7 @@ def congress_facts(run, legislators, clerk_seats, congress_api, wikidata_sens):
                 listed = by_state[code]["rep"].get(district)
                 api = None
                 if congress_api is not None:
-                    api = next((b for b, (c, s, d) in congress_api.items()
+                    api = next((b for b, (c, s, d, _) in congress_api.items()
                                 if c == "rep" and s == code and int(d or 0) == district), None)
                 if seat == "missing":
                     run.issue("%s-%d: the Clerk doesn't list this seat" % (code, district))
@@ -536,7 +639,9 @@ def congress_facts(run, legislators, clerk_seats, congress_api, wikidata_sens):
                                   % (code, district, seat["name"]))
                 if agreed == "seat":
                     name = listed["name"] if listed and listed["bioguide"] == seat["bioguide"] else seat["name"]
-                    representatives.append({"district": district, "name": name, "party": seat["party"]})
+                    representatives.append(with_photo(
+                        {"district": district, "name": name, "party": seat["party"]},
+                        member_photo(seat["bioguide"], name, [previous_reps.get(district)])))
                 elif agreed == "vacant":
                     representatives.append({"district": district, "vacant": True})
                 elif district in previous_reps:
@@ -566,13 +671,15 @@ def openstates_governors(run, tar_raw):
                 start, end = role.get("start_date", "0000"), role.get("end_date", "9999-12-31")
                 if start <= run.today < end:
                     governors.setdefault(code, []).append(
-                        {"name": person["name"], "party": party_name(person["party"]), "since": start})
+                        {"name": person["name"], "party": party_name(person["party"]), "since": start,
+                         "photo": person["image"]})
     return governors
 
 
 def parse_openstates_person(text):
     """The few fields needed from an Open States person file (simple, regular YAML)."""
     name = re.search(r"(?m)^name: (.+)$", text)
+    image = re.search(r"(?m)^image: (.+)$", text)
     party = re.search(r"(?m)^party:\n- name: (.+)$", text)
     roles = []
     block = re.search(r"(?ms)^roles:\n(.*?)(?=^[A-Za-z_])", text + "\nend:")
@@ -586,6 +693,7 @@ def parse_openstates_person(text):
     return {
         "name": name.group(1).strip().strip("'\"") if name else "",
         "party": party.group(1).strip() if party else None,
+        "image": image.group(1).strip().strip("'\"") if image else None,
         "roles": roles,
     }
 
@@ -601,7 +709,7 @@ def usagov_governor(code):
     raise SourceError("usa.gov/%s doesn't name a governor" % slug)
 
 
-def governor_facts(run, openstates):
+def governor_facts(run, openstates, wikidata_govs):
     result = {}
     for code in STATES:
         if code == "DC":
@@ -617,8 +725,13 @@ def governor_facts(run, openstates):
         time.sleep(0.3)  # Polite to USA.gov.
         if len(candidates) == 1 and official and same_person(candidates[0]["name"], official):
             # The name as the government writes it (USA.gov), confirmed by Open States.
-            result[code] = {"name": official if valid_name(official) else candidates[0]["name"],
-                            "party": candidates[0]["party"]}
+            name = official if valid_name(official) else candidates[0]["name"]
+            photo = next((p for n, p in (wikidata_govs or {}).get(code, []) if p and same_person(n, name)), None)
+            if not photo:
+                photo = candidates[0].get("photo")
+            if not photo and previous and previous.get("name") == name:
+                photo = previous.get("photo")
+            result[code] = with_photo({"name": name, "party": candidates[0]["party"]}, photo)
             continue
         if official:
             run.issue("%s governor: Open States %s ≠ USA.gov %s"
@@ -674,6 +787,12 @@ def check_file(doc):
             problems.append("%s capital %r" % (code, state["capital"]))
     if seats != 435:
         problems.append("%d House seats" % seats)
+    people = [national.get(k) or {} for k in ("president", "vicePresident", "speaker", "chiefJustice")]
+    for state in doc["states"].values():
+        people += state["senators"] + state["representatives"] + [state["governor"] or {}, state["delegate"] or {}]
+    for person in people:
+        if "photo" in person and not photo_url(person["photo"]):
+            problems.append("bad photo URL %r" % person["photo"])
     vacant = sum(1 for s in doc["states"].values() for r in s["representatives"] if r.get("vacant"))
     if vacant > 15:
         problems.append("%d vacant House seats looks wrong" % vacant)
@@ -681,8 +800,16 @@ def check_file(doc):
 
 
 def content(doc):
-    """The facts, without timestamps or which sources confirmed them: compared to see whether anything changed."""
-    return {k: v for k, v in doc.items() if k not in ("generatedAt", "checkedAt", "sources", "factSources")}
+    """The facts, without timestamps, which sources confirmed them or photos: compared to see whether anything
+    changed."""
+    def strip(value):
+        if isinstance(value, dict):
+            return {k: strip(v) for k, v in value.items() if k != "photo"}
+        if isinstance(value, list):
+            return [strip(v) for v in value]
+        return value
+
+    return strip({k: v for k, v in doc.items() if k not in ("generatedAt", "checkedAt", "sources", "factSources")})
 
 
 def national_fact(run, key, build):
@@ -724,6 +851,7 @@ def build(previous):
             run.issue("Wikidata lists %d senators: not used" % len(wikidata_sens))
             wikidata_sens = None
     openstates = optional("Open States", lambda: openstates_governors(run, fetch(URLS["openstates"], timeout=120)))
+    wikidata_govs = optional("Wikidata governors", wikidata_governors)
 
     def need(value, label):
         if value is None:
@@ -750,6 +878,25 @@ def build(previous):
         if chief_justice is None or justices is None:
             raise SourceError("the Chief Justice can't be confirmed and there is no previous value")
 
+    # Photos: Wikidata's for the President and Vice President; Congress.gov's for the Speaker. Without a new
+    # one, the person keeps the photo they had.
+    def national_photo(key, person, found):
+        before = run.previous_national(key) or {}
+        kept = person.get("photo") or (before.get("photo") if before.get("name") == person["name"] else None)
+        return with_photo(person, found or kept)
+
+    president = national_photo("president", president, holder_photo(wikidata.get("president"), president["name"]))
+    vice_president = national_photo("vicePresident", vice_president,
+                                    holder_photo(wikidata.get("vicePresident"), vice_president["name"]))
+    speaker_id = speaker.pop("bioguide", None)
+    speaker_photo = None
+    if speaker_id:
+        if congress_api is not None and speaker_id in congress_api:
+            speaker_photo = congress_api[speaker_id][3]
+        speaker_photo = speaker_photo or URLS["photos"].format(bioguide=speaker_id)
+    speaker = national_photo("speaker", speaker, speaker_photo)
+    chief_justice = national_photo("chiefJustice", chief_justice, chief_justice.get("photo"))
+
     # Wikidata also has to agree on the President and Vice President, when it answers.
     for key, person in (("president", president), ("vicePresident", vice_president)):
         holders = wikidata.get(key)
@@ -757,7 +904,7 @@ def build(previous):
             run.note("%s: Wikidata lists %s, kept %s" % (key, [h["name"] for h in holders], person["name"]))
 
     congress = congress_facts(run, legislators, clerk_seats, congress_api, wikidata_sens)
-    governors = governor_facts(run, openstates)
+    governors = governor_facts(run, openstates, wikidata_govs)
 
     states = {}
     for code, name in STATES.items():
